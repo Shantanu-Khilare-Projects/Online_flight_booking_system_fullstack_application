@@ -1,41 +1,57 @@
 package com.app.servicesimpl;
 
-import javax.transaction.Transactional;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
 
 import com.app.daos.UserDao;
-import com.app.dtos.ApiResponse;
-import com.app.dtos.LoginDto;
 import com.app.dtos.UserReqDto;
-import com.app.entities.User;
 import com.app.services.UserService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.app.dtos.LoginDTO;
+import com.app.entities.User;
 
 @Service
-@Transactional
-public class UserServiceImpl implements UserService{
-	@Autowired
-	private ModelMapper mapper;
-	
-	@Autowired
-	private UserDao userDao;
+public class UserServiceImpl implements UserService {
 
-	@Override
-	public ApiResponse register(UserReqDto dto) {
-		User user=mapper.map(dto, User.class);
-		userDao.save(user);
-		return new ApiResponse("user registered successfully!!!");
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	private final UserDao userRepository;
+
+	public UserServiceImpl(UserDao userRepository) {
+		this.userRepository = userRepository;
 	}
 
 	@Override
-	public ApiResponse login(LoginDto dto) {
-		User user=userDao.findByEmailAndPassword(dto.getEmail(), dto.getPassword())
-						.orElseThrow(()->new RuntimeException("Invalid credentials..."));
-		return new ApiResponse("login success!!!");
+	public User addUser(UserReqDto dto) {
+		User user = modelMapper.map(dto, User.class);
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		return userRepository.save(user);
 	}
-	
-	
 
+	@Override
+	public Optional<User> getUserById(Long id) {
+		return userRepository.findById(id);
+	}
+
+	@Override
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
+	}
+
+	public Optional<User> login(LoginDTO loginDTO) {
+		Optional<User> user = userRepository.findByEmail(loginDTO.getEmail());
+		if (user.isPresent() && user.get().getPassword().equals(loginDTO.getPassword())) {
+			return user;
+		}
+		return Optional.empty();
+	}
 }
+	

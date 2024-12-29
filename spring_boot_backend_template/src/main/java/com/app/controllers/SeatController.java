@@ -22,31 +22,31 @@ public class SeatController {
 	@Autowired
 	private SeatService seatService;
 
-	@PostMapping("/add/{flightId}")
+	@PostMapping("/admin/add/{flightId}")
 	public ResponseEntity<?> addSeat(@RequestBody SeatDto dto,@PathVariable Long flightId) {
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
 								.body(seatService.addSingleSeat(dto, flightId));
 	}
 	
-	@PostMapping("/addAll/{flightId}")
+	@PostMapping("/admin/addAll/{flightId}")
 	public ResponseEntity<?> addMultipleSeats(@PathVariable Long flightId, @RequestBody SeatMulDto dto) {	
 		return ResponseEntity.status(HttpStatus.CREATED)
 								.body(seatService.addMultipleSeats(flightId, dto));
 	}
-	@GetMapping("/{flightId}")
+	@GetMapping("/all/seat/{flightId}")
 	public ResponseEntity<?> getSeatsByFlight(@PathVariable Long flightId) {
 		return ResponseEntity.ok(seatService.flightSeats(flightId));
 	}
-	@GetMapping("/available/{flightId}")
+	@GetMapping("/all/seat/available/{flightId}")
 	public ResponseEntity<?> availableSeats(@RequestParam Long flightId) {
 		return ResponseEntity.ok(seatService.availableSeats(flightId));
 	}
-	@GetMapping("/business/{flightId}")
+	@GetMapping("/all/seat/business/{flightId}")
 	public ResponseEntity<?> businessSeats(@RequestParam Long flightId) {
 		return ResponseEntity.ok(seatService.businessSeats(flightId));
 	}
-	@GetMapping("/economy/{flightId}")
+	@GetMapping("/all/seat/economy/{flightId}")
 	public ResponseEntity<?> economySeats(@RequestParam Long flightId) {
 		return ResponseEntity.ok(seatService.economySeats(flightId));
 	}

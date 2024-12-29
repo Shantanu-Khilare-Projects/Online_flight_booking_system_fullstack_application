@@ -2,9 +2,9 @@ package com.app.dtos;
 
 import lombok.Data;
 
-@Data
-public class LoginDto {
 
-	private String email;
-	private String password;
+@Data
+public class LoginDTO {
+    private String email;
+    private String password;
 }

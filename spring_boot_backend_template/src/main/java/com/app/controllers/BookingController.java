@@ -22,14 +22,14 @@ public class BookingController {
 	@Autowired
 	private BookingService bookingService;
 	
-	@PostMapping("/bookSingle/{seatId}/{flightId}/{userId}")
+	@PostMapping("/customer/bookSingle/{seatId}/{flightId}/{userId}")
 	public ResponseEntity<?> bookSingle(@RequestParam Long seatId,
 					@RequestParam Long flightId,@RequestParam Long userId) {
 		
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(bookingService.bookSingleSeat(seatId, userId, flightId));
 	}
-	@PostMapping("/bookMultiple/{flightId}/{userId}")
+	@PostMapping("/customer/bookMultiple/{flightId}/{userId}")
 	public ResponseEntity<?> bookMultipleSeats(@RequestBody MultipleSeatsBookingDto dto,
 						@RequestParam Long flightId,@RequestParam Long userId) {
 		
@@ -37,11 +37,11 @@ public class BookingController {
 				.body(bookingService.bookMultipleSeats(userId, flightId, dto));
 	}
 	
-	@GetMapping("/{userId}")
+	@GetMapping("/customer/{userId}")
 	public ResponseEntity<?> bookingsByUserId(@RequestParam Long userId) {
 		return ResponseEntity.ok(bookingService.bookingsByUserId(userId));
 	}
-	@GetMapping("/confirmed/{userId}")
+	@GetMapping("/customer/confirmed/{userId}")
 	public ResponseEntity<?> confirmedBookingsByUserId(@RequestParam Long userId) {
 		return ResponseEntity.ok(bookingService.bookingStatus(BookingStatus.CONFIRMED, userId));
 	}

@@ -21,12 +21,11 @@ import com.app.services.FlightService;
 
 
 @RestController
-@RequestMapping("/flight")
 public class FlightController {
 	@Autowired
 	private FlightService flightService;
 
-	@PostMapping("/add")
+	@PostMapping("/admin/flight/add")
 	public ResponseEntity<?> addNewFlight(@RequestBody FlightReqDto dto) {
 		try {
 			return ResponseEntity.status(HttpStatus.CREATED).body(flightService.addFlight(dto));
@@ -36,32 +35,32 @@ public class FlightController {
 		}
 	}
 	
-	@GetMapping("/fromto")
+	@GetMapping("/all/fromto")
 	public ResponseEntity<?> getFlightsByOriginAndDestination(@RequestBody FlightOriginDestinationDto dto) {
 		return ResponseEntity.ok(flightService.showFlights(dto));
 	}
 	
-	@GetMapping("/departureTime/{departureTime}")
+	@GetMapping("/all/departureTime/{departureTime}")
 	public List<Flight> showFlightsByDepartureTime(@RequestParam LocalDateTime departureTime) {
 		return flightService.showFlightsByDepartureTime(departureTime);
 	}
 
-	@GetMapping("/arrivalTime/{arrivalTime}")
+	@GetMapping("/all/arrivalTime/{arrivalTime}")
 	public List<Flight> showFlightsByarrivalTime(@RequestParam LocalDateTime arrivalTime) {
 		return flightService.showFlightsByarrivalTime(arrivalTime);
 	}
 
-	@GetMapping("/status/{status}")
+	@GetMapping("/all/status/{status}")
 	public List<Flight> showFlightsByStatus(@RequestParam Status status) {
 		return flightService.showFlightsByStatus(status);
 	}
 
-	@GetMapping("/availableSeats/{availableSeats}")
+	@GetMapping("/all/availableSeats/{availableSeats}")
 	public List<Flight> showFlightsByAvailableSeats(@RequestParam int availableSeats) {
 		return flightService.showFlightsByAvailableSeats(availableSeats);
 	}
 
-	@GetMapping("/destination/{destination}")
+	@GetMapping("/all/destination/{destination}")
 	public List<Flight> showFlightsByDestination(@RequestParam String destination) {
 		return flightService.showFlightsByDestination(destination);
 	}
